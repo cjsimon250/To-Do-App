@@ -74,6 +74,8 @@ main {
   margin-left: 10%;
   margin-left: 10%;
   padding-top: 1em;
+  /* display: grid; */
+  /* grid-template-rows: 1fr 1fr 1fr; */
 }
 
 #yellow-btn {
@@ -93,4 +95,19 @@ main {
 }
 #green-btn {
   background-color: rgb(137, 247, 107);
+}
+
+.input-fields {
+  width: 20%;
+  height: 30%;
+  border-radius: 1em;
+}
+
+.textareas {
+  margin-top: 10%;
+  border: none;
+  outline: none;
+  resize: none;
+  height: 70%;
+  width: 90%;
 }
