@@ -5,6 +5,8 @@ function onReady() {
   $("#create-btn").on("click", toggleCreateButtons);
 
   $(".color-btns").on("click", ".create-input-btns", createInputFeild);
+
+  $("main").on("click", ".submit-to-do", handleSubmit);
 }
 
 let showCreateInputs = false;
@@ -32,6 +34,7 @@ function showNewToDoColors() {
     `);
 }
 
+//function to add new inout field for task
 function createInputFeild() {
   //determining input background color
   let backgroundColor;
@@ -39,7 +42,6 @@ function createInputFeild() {
 
   if (id === "yellow-btn") {
     backgroundColor = "rgb(246, 216, 82)";
-    console.log(backgroundColor);
   } else if (id === "orange-btn") {
     backgroundColor = "rgb(226, 116, 5)";
   } else if (id === "purple-btn") {
@@ -52,13 +54,63 @@ function createInputFeild() {
 
   $("main").append(`
   <div class="input-fields" style="background-color:${backgroundColor}">
-    <textarea class="textareas" style="background-color:${backgroundColor}" maxlength="200">
+    <textarea readonly class="textareas" style="background-color:${backgroundColor}" maxlength="200">
     </textarea>
-    <button class="submit-to-do" >Submit</button>
+    <button class="submit-to-do">Submit</button>
     <button class="delete-to-do">Delete</button>
     <button class="complete-to-do">Complete</button>
   </div>
   `);
+}
+
+//function to determine the current date and time
+function determineDate() {
+  let today = new Date();
+  let date =
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  let time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  let dateTime = date + " " + time;
+
+  return dateTime;
+}
+
+//function to create new object to send to data base
+function handleSubmit() {
+  console.log("Submit button clicked.");
+  let toDo = {};
+  toDo.task = $(this).siblings("textarea").val();
+  toDo.timeCreated = determineDate();
+
+  //appending time created to the DOM
+  $(this).closest(".input-fields").append(`
+    <p class="time-created">Time Created: ${toDo.timeCreated}</p>
+  `);
+
+  //removing submit button on submission
+  $(this).remove();
+
+  //TODO make it so textarea is read only after submission TODO
+  //$(this).siblings("textarea").prop("readonly", true);
+
+  addTask(toDo);
+}
+
+//adds the new to do task to database
+function addTask(taskToAdd) {
+  $.ajax({
+    type: "POST",
+    url: "/tasks",
+    data: taskToAdd,
+  })
+    .then(function (response) {
+      console.log("Response from server.", response);
+      refreshTasks();
+    })
+    .catch(function (error) {
+      console.log("Error in POST", error);
+      alert("Unable to add task at this time. Please try again later.");
+    });
 }
 
 function render() {
