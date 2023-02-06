@@ -23,10 +23,17 @@ router.post("/", (req, res) => {
   let newTask = req.body;
   console.log(`adding task`, newTask);
 
-  let queryText = `INSERT INTO "to_do_table" ("task", "completed", "timeCreated")
-                     VALUES ($1, $2, $3);`;
+  let queryText = `INSERT INTO "to_do_table" ("task", "completed", "timeCreated", "color1", "color2", "color3")
+                     VALUES ($1, $2, $3, $4, $5, $6);`;
   pool
-    .query(queryText, [newTask.task, newTask.completed, newTask.timeCreated])
+    .query(queryText, [
+      newTask.task,
+      newTask.completed,
+      newTask.timeCreated,
+      newTask.color1,
+      newTask.color2,
+      newTask.color3,
+    ])
     .then((result) => {
       res.sendStatus(201);
     })

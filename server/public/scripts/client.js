@@ -33,7 +33,7 @@ function showNewToDoColors() {
     <button class="create-input-btns" id="green-btn"></button>
     `);
 }
-let backgroundColor;
+let backgroundColor = "rgb(226, 116, 5)";
 //function to add new inout field for task
 function createInputFeild() {
   //determining input background color
@@ -74,13 +74,32 @@ function determineDate() {
   return dateTime;
 }
 
+//function to turn the background into a format that can
+//be sent top the server
+function restructureBackgroundColor(string) {
+  let rbgArray = string.match(/\d+/g);
+
+  colorObject = {
+    color1: rbgArray[0],
+    color2: rbgArray[1],
+    color3: rbgArray[2],
+  };
+
+  return colorObject;
+}
+
 //function to create new object to send to data base
 function handleSubmit() {
-  console.log("Submit button clicked.");
+  //creating three different key values for each different color
+  restructureBackgroundColor(backgroundColor);
+
   let toDo = {};
   toDo.task = $(this).siblings("textarea").val();
   toDo.completed = false;
   toDo.timeCreated = determineDate();
+  toDo.color1 = colorObject.color1;
+  toDo.color2 = colorObject.color2;
+  toDo.color3 = colorObject.color3;
 
   $(this).closest(".input-fields").append(`
     <p class="time-created">Time Created: ${toDo.timeCreated}</p>
@@ -94,6 +113,8 @@ function handleSubmit() {
 
   addTask(toDo);
 }
+
+function getTasks() {}
 
 //adds the new to do task to database
 function addTask(taskToAdd) {
