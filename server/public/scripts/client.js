@@ -33,11 +33,10 @@ function showNewToDoColors() {
     <button class="create-input-btns" id="green-btn"></button>
     `);
 }
-
+let backgroundColor;
 //function to add new inout field for task
 function createInputFeild() {
   //determining input background color
-  let backgroundColor;
   let id = $(this).attr("id");
 
   if (id === "yellow-btn") {
@@ -54,7 +53,7 @@ function createInputFeild() {
 
   $("main").append(`
   <div class="input-fields" style="background-color:${backgroundColor}">
-    <textarea readonly class="textareas" style="background-color:${backgroundColor}" maxlength="200">
+    <textarea class="textareas" style="background-color:${backgroundColor}" maxlength="200">
     </textarea>
     <button class="submit-to-do">Submit</button>
     <button class="delete-to-do">Delete</button>
@@ -80,9 +79,9 @@ function handleSubmit() {
   console.log("Submit button clicked.");
   let toDo = {};
   toDo.task = $(this).siblings("textarea").val();
+  toDo.completed = false;
   toDo.timeCreated = determineDate();
 
-  //appending time created to the DOM
   $(this).closest(".input-fields").append(`
     <p class="time-created">Time Created: ${toDo.timeCreated}</p>
   `);
@@ -91,7 +90,7 @@ function handleSubmit() {
   $(this).remove();
 
   //TODO make it so textarea is read only after submission TODO
-  //$(this).siblings("textarea").prop("readonly", true);
+  //   $(this).siblings("textarea").setAttribute("readonly", true);
 
   addTask(toDo);
 }
@@ -105,7 +104,7 @@ function addTask(taskToAdd) {
   })
     .then(function (response) {
       console.log("Response from server.", response);
-      refreshTasks();
+      //   refreshTasks();
     })
     .catch(function (error) {
       console.log("Error in POST", error);

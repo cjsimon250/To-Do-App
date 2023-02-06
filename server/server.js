@@ -8,6 +8,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve back static files by default
 app.use(express.static("server/public"));
 
+app.use("/tasks", tasksRouter);
+
 // Start listening for requests on a specific port
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
