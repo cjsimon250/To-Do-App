@@ -44,4 +44,23 @@ router.post("/", (req, res) => {
     });
 });
 
+//deletes task from the database
+router.delete("/:id", (req, res) => {
+  const queryText = `
+      DELETE FROM "to_do_table"
+      WHERE id = $1;
+      `;
+  const queryParams = [req.params.id];
+
+  pool
+    .query(queryText, queryParams)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log("DELETE /to_do_table/:id failed", err);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
