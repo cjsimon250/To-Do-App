@@ -4,10 +4,15 @@ function onReady() {
   render();
   $("#create-btn").on("click", toggleCreateButtons);
 
-  $(".color-btns").on("click", ".create-input-btns", createInputFeild);
+  $(".color-btns").on("click", ".create-input-btns", createInputField);
 
   $("main").on("click", ".submit-to-do", handleSubmit);
+
+  getTasks();
 }
+
+//global array to hold all tasks
+let tasks = [];
 
 let showCreateInputs = false;
 
@@ -33,9 +38,10 @@ function showNewToDoColors() {
     <button class="create-input-btns" id="green-btn"></button>
     `);
 }
-let backgroundColor = "rgb(226, 116, 5)";
+
+let backgroundColor = "";
 //function to add new inout field for task
-function createInputFeild() {
+function createInputField() {
   //determining input background color
   let id = $(this).attr("id");
 
@@ -51,7 +57,7 @@ function createInputFeild() {
     backgroundColor = "rgb(137, 247, 107)";
   }
 
-  $("main").append(`
+  $("#to-do-view").append(`
   <div class="input-fields" style="background-color:${backgroundColor}">
     <textarea class="textareas" style="background-color:${backgroundColor}" maxlength="200">
     </textarea>
@@ -101,10 +107,6 @@ function handleSubmit() {
   toDo.color2 = colorObject.color2;
   toDo.color3 = colorObject.color3;
 
-  $(this).closest(".input-fields").append(`
-    <p class="time-created">Time Created: ${toDo.timeCreated}</p>
-  `);
-
   //removing submit button on submission
   $(this).remove();
 
@@ -114,7 +116,17 @@ function handleSubmit() {
   addTask(toDo);
 }
 
-function getTasks() {}
+//get tasks from the data base and put inyto array
+function getTasks() {
+  $.ajax({
+    method: "GET",
+    url: "/tasks",
+  }).then((response) => {
+    tasks = response;
+    console.log(response);
+    render();
+  });
+}
 
 //adds the new to do task to database
 function addTask(taskToAdd) {
@@ -125,7 +137,8 @@ function addTask(taskToAdd) {
   })
     .then(function (response) {
       console.log("Response from server.", response);
-      //   refreshTasks();
+      getTasks();
+      console.log(tasks);
     })
     .catch(function (error) {
       console.log("Error in POST", error);
@@ -134,11 +147,45 @@ function addTask(taskToAdd) {
 }
 
 function render() {
+  //toggle the create color buttons
   if (showCreateInputs === false) {
     $(".color-btns").empty();
     $("#create-btn").text("+");
   } else {
     showNewToDoColors();
     $("#create-btn").text("^");
+  }
+
+  //loop through array of tasks and render to DOM
+  $("#to-do-view").empty();
+
+  for (let task of tasks) {
+    let postedBackgroundColor = `rgb(${task.color1}, ${task.color2}, ${task.color3})`;
+
+    if (task.completed === false) {
+      $("#to-do-view").append(`
+        <div class="input-fields" style="background-color:${postedBackgroundColor}">
+          <textarea readonly class="textareas" 
+          style="background-color:${postedBackgroundColor}" maxlength="200">
+          ${task.task}
+          </textarea>
+          <button class="delete-to-do">Delete</button>
+          <button class="complete-to-do">Complete</button>
+          <p class="time-created">Time Created: ${task.timeCreated}</p>
+        </div>
+        `);
+    } else {
+      $("#to-do-view").append(`
+        <div class="input-fields" style="background-color:${postedBackgroundColor}">
+          <textarea readonly class="textareas" 
+          style="background-color:${postedBackgroundColor}" maxlength="200">
+          ${task.task}
+          </textarea>
+          <button class="delete-to-do">Delete</button>
+          <button class="complete-to-do">Complete</button>
+          <p class="time-completed">Time Created: ${task.timeCreated}</p>
+        </div>
+        `);
+    }
   }
 }

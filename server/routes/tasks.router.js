@@ -23,7 +23,8 @@ router.post("/", (req, res) => {
   let newTask = req.body;
   console.log(`adding task`, newTask);
 
-  let queryText = `INSERT INTO "to_do_table" ("task", "completed", "timeCreated", "color1", "color2", "color3")
+  let queryText = `INSERT INTO "to_do_table" 
+  ("task", "completed", "timeCreated", "color1", "color2", "color3")
                      VALUES ($1, $2, $3, $4, $5, $6);`;
   pool
     .query(queryText, [

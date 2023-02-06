@@ -98,12 +98,13 @@ main {
 }
 
 .input-fields {
-  width: 20%;
-  height: 30%;
+  width: 15em;
+  height: 15em;
   border-radius: 1em;
 }
 
 .textareas {
+  text-align: center;
   margin-top: 10%;
   border: none;
   outline: none;
