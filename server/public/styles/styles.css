@@ -5,7 +5,7 @@
 
 body {
   text-align: center;
-  background-color: rgb(21, 20, 20);
+  background-color: rgb(223, 223, 223);
   width: 100vw;
   height: 100vh;
 }
@@ -17,7 +17,7 @@ header {
   margin-left: 1em;
   position: fixed;
   border: 8px solid;
-  border-image: linear-gradient(45deg, #ffffff, rgb(255, 122, 89)) 10;
+  border-image: linear-gradient(45deg, #181818, rgb(0, 0, 0)) 10;
   background-color: rgb(255, 249, 243);
   text-align: center;
   display: flex;
@@ -63,17 +63,16 @@ header {
 }
 
 main {
-  border-width: 5px;
   border: 8px solid;
-  border-image: linear-gradient(45deg, #ffffff, rgb(255, 122, 89)) 10;
-  background-color: rgb(255, 249, 243);
-  background-color: rgb(255, 249, 243);
+  border-image: linear-gradient(45deg, #7f5e29, rgb(172, 142, 61)) 10;
+  background-color: rgb(252, 245, 224);
   height: 90vh;
   width: 80vw;
   margin-top: 5%;
   margin-left: 10%;
   margin-left: 10%;
   padding-top: 1em;
+  box-shadow: 15px 10px 10px rgb(103, 103, 103);
 }
 
 #yellow-btn {
@@ -112,11 +111,64 @@ main {
 }
 
 .textareas {
-  text-align: center;
+  text-align: left;
   margin-top: 10%;
   border: none;
   outline: none;
   resize: none;
-  height: 70%;
+  height: 60%;
   width: 90%;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-size: 1.2em;
+  overflow-y: scroll;
+}
+
+.submit-to-do {
+  background-color: black;
+  color: rgb(255, 255, 255);
+  border: none;
+  margin-top: 5%;
+  border-radius: 1em;
+  font-size: 1em;
+  height: 2em;
+  width: 5em;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+.delete-to-do {
+  background-color: black;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5em;
+  font-size: 1.5em;
+  height: 1.2em;
+  width: 1.2em;
+  margin-bottom: 5%;
+}
+
+.complete-to-do {
+  background-color: black;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5em;
+  font-size: 1.5em;
+  height: 1.2em;
+  width: 1.2em;
+  margin-bottom: 5%;
+}
+
+.time-created {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+.time-completed {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+.input-fields {
+  box-shadow: 10px 5px 5px rgb(103, 103, 103);
 }

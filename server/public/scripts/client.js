@@ -45,7 +45,7 @@ function showNewToDoColors() {
 }
 
 let backgroundColor = "";
-//function to add new inout field for task
+//function to add new input field for task
 function createInputField() {
   //determining input background color
   let id = $(this).attr("id");
@@ -66,7 +66,7 @@ function createInputField() {
   <div class="input-fields" style="background-color:${backgroundColor}">
     <textarea class="textareas" style="background-color:${backgroundColor}" maxlength="200">
     </textarea>
-    <button class="submit-to-do">Submit</button>
+    <button class="submit-to-do">Add Task</button>
   </div>
   `);
 }
@@ -202,23 +202,22 @@ function render() {
     if (task.completed === false) {
       $("#to-do-view").append(`
           <div class="input-fields" data-id="${task.id}" style="background-color:${postedBackgroundColor}">
-            <textarea readonly class="textareas"
+            <textarea readonly class="textareas" autofocus
             style="background-color:${postedBackgroundColor}" maxlength="200">
             ${task.task}
             </textarea>
-            <button class="delete-to-do">Delete</button>
-            <button class="complete-to-do">Complete</button>
+            <button class="delete-to-do">&#10007</button>
+            <button class="complete-to-do">&#10003</button>
             <p class="time-created">Created: ${task.timeCreated}</p>
           </div>
           `);
     } else {
       $("#to-do-view").append(`
-          <div class="input-fields" data-id="${task.id}" style="background-color:${postedBackgroundColor}">
+          <div class="input-fields" data-id="${task.id}" style="background-color:lime">
             <textarea readonly class="textareas"
-            style="background-color:${postedBackgroundColor}" maxlength="200">
-            ${task.task}
+            style="background-color:lime" maxlength="200">${task.task}
             </textarea>
-            <button class="delete-to-do">Delete</button>
+            <button class="delete-to-do">&#10007</button>
             <p class="time-completed">Completed: ${task.timeCreated}</p>
           </div>
         `);
