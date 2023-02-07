@@ -74,8 +74,6 @@ main {
   margin-left: 10%;
   margin-left: 10%;
   padding-top: 1em;
-  /* display: grid; */
-  /* grid-template-rows: 1fr 1fr 1fr; */
 }
 
 #yellow-btn {
@@ -93,8 +91,18 @@ main {
 #blue-btn {
   background-color: rgb(76, 164, 241);
 }
+
 #green-btn {
   background-color: rgb(137, 247, 107);
+}
+
+#to-do-view {
+  margin-left: 5.5%;
+  margin-top: 5%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1em;
 }
 
 .input-fields {

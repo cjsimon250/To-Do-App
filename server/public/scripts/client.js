@@ -2,11 +2,16 @@ $(document).ready(onReady);
 
 function onReady() {
   render();
+
   $("#create-btn").on("click", toggleCreateButtons);
 
   $(".color-btns").on("click", ".create-input-btns", createInputField);
 
   $("main").on("click", ".submit-to-do", handleSubmit);
+
+  $("#to-do-view").on("click", ".delete-to-do", handleDelete);
+
+  $("#to-do-view").on("click", ".complete-to-do", isComplete);
 
   getTasks();
 }
@@ -62,8 +67,6 @@ function createInputField() {
     <textarea class="textareas" style="background-color:${backgroundColor}" maxlength="200">
     </textarea>
     <button class="submit-to-do">Submit</button>
-    <button class="delete-to-do">Delete</button>
-    <button class="complete-to-do">Complete</button>
   </div>
   `);
 }
@@ -107,23 +110,16 @@ function handleSubmit() {
   toDo.color2 = colorObject.color2;
   toDo.color3 = colorObject.color3;
 
-  //removing submit button on submission
-  $(this).remove();
-
-  //TODO make it so textarea is read only after submission TODO
-  //   $(this).siblings("textarea").setAttribute("readonly", true);
-
   addTask(toDo);
 }
 
-//get tasks from the data base and put inyto array
+//get tasks from the data base and put into array
 function getTasks() {
   $.ajax({
     method: "GET",
     url: "/tasks",
   }).then((response) => {
     tasks = response;
-    console.log(response);
     render();
   });
 }
@@ -138,11 +134,50 @@ function addTask(taskToAdd) {
     .then(function (response) {
       console.log("Response from server.", response);
       getTasks();
-      console.log(tasks);
     })
     .catch(function (error) {
       console.log("Error in POST", error);
       alert("Unable to add task at this time. Please try again later.");
+    });
+}
+
+//function to delete a task
+function handleDelete() {
+  let id = $(this).parents("div").data("id");
+
+  $.ajax({
+    method: "DELETE",
+    url: `/tasks/${id}`, //generating url on click
+  })
+    .then(() => {
+      getTasks();
+    })
+    .catch((err) => {
+      console.log("Error in handleDelete", err);
+    });
+}
+
+//function to change completed to true
+// & time created to the time finished
+function isComplete() {
+  let id = $(this).parents("div").data("id");
+  let timeCompleted = determineDate();
+
+  $.ajax({
+    url: `/tasks/${id}`,
+
+    method: "PUT",
+    data: {
+      completed: true,
+      timeCreated: timeCompleted,
+    },
+  })
+    .then((response) => {
+      render();
+      getTasks();
+    })
+    .catch((err) => {
+      console.error("PUT failed", err);
     });
 }
 
@@ -160,31 +195,32 @@ function render() {
   $("#to-do-view").empty();
 
   for (let task of tasks) {
-    let postedBackgroundColor = `rgb(${task.color1}, ${task.color2}, ${task.color3})`;
+    let postedBackgroundColor = `rgb(${task.color1},
+          ${task.color2},
+          ${task.color3})`;
 
     if (task.completed === false) {
       $("#to-do-view").append(`
-        <div class="input-fields" style="background-color:${postedBackgroundColor}">
-          <textarea readonly class="textareas" 
-          style="background-color:${postedBackgroundColor}" maxlength="200">
-          ${task.task}
-          </textarea>
-          <button class="delete-to-do">Delete</button>
-          <button class="complete-to-do">Complete</button>
-          <p class="time-created">Time Created: ${task.timeCreated}</p>
-        </div>
-        `);
+          <div class="input-fields" data-id="${task.id}" style="background-color:${postedBackgroundColor}">
+            <textarea readonly class="textareas"
+            style="background-color:${postedBackgroundColor}" maxlength="200">
+            ${task.task}
+            </textarea>
+            <button class="delete-to-do">Delete</button>
+            <button class="complete-to-do">Complete</button>
+            <p class="time-created">Created: ${task.timeCreated}</p>
+          </div>
+          `);
     } else {
       $("#to-do-view").append(`
-        <div class="input-fields" style="background-color:${postedBackgroundColor}">
-          <textarea readonly class="textareas" 
-          style="background-color:${postedBackgroundColor}" maxlength="200">
-          ${task.task}
-          </textarea>
-          <button class="delete-to-do">Delete</button>
-          <button class="complete-to-do">Complete</button>
-          <p class="time-completed">Time Created: ${task.timeCreated}</p>
-        </div>
+          <div class="input-fields" data-id="${task.id}" style="background-color:${postedBackgroundColor}">
+            <textarea readonly class="textareas"
+            style="background-color:${postedBackgroundColor}" maxlength="200">
+            ${task.task}
+            </textarea>
+            <button class="delete-to-do">Delete</button>
+            <p class="time-completed">Completed: ${task.timeCreated}</p>
+          </div>
         `);
     }
   }

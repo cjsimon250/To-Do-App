@@ -21,7 +21,6 @@ router.get("/", (req, res) => {
 //adds new task to database
 router.post("/", (req, res) => {
   let newTask = req.body;
-  console.log(`adding task`, newTask);
 
   let queryText = `INSERT INTO "to_do_table" 
   ("task", "completed", "timeCreated", "color1", "color2", "color3")
@@ -40,6 +39,45 @@ router.post("/", (req, res) => {
     })
     .catch((error) => {
       console.log(`Error adding new task`, error);
+      res.sendStatus(500);
+    });
+});
+
+//deletes task from the database
+router.delete("/:id", (req, res) => {
+  const queryText = `
+      DELETE FROM "to_do_table"
+      WHERE id = $1;
+      `;
+  const queryParams = [req.params.id];
+
+  pool
+    .query(queryText, queryParams)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log("DELETE /to_do_table/:id failed", err);
+      res.sendStatus(500);
+    });
+});
+
+//updates task in the database
+router.put("/:id", (req, res) => {
+  const queryText = `UPDATE "to_do_table" 
+      SET "completed"=$1,"timeCreated" = $2
+      WHERE "id"=$3;`;
+
+  const queryParams = [req.body.completed, req.body.timeCreated, req.params.id];
+
+  pool
+    .query(queryText, queryParams)
+    .then((dbRes) => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log("sending 500");
+      console.log(`PUT Error making query: ${queryText}`, error);
       res.sendStatus(500);
     });
 });
