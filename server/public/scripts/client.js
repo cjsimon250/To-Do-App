@@ -2,6 +2,7 @@ $(document).ready(onReady);
 
 function onReady() {
   render();
+
   $("#create-btn").on("click", toggleCreateButtons);
 
   $(".color-btns").on("click", ".create-input-btns", createInputField);
@@ -9,6 +10,8 @@ function onReady() {
   $("main").on("click", ".submit-to-do", handleSubmit);
 
   $("#to-do-view").on("click", ".delete-to-do", handleDelete);
+
+  $("#to-do-view").on("click", ".complete-to-do", isComplete);
 
   getTasks();
 }
@@ -154,6 +157,30 @@ function handleDelete() {
     });
 }
 
+//function to change completed to true
+// & time created to the time finished
+function isComplete() {
+  let id = $(this).parents("div").data("id");
+  let timeCompleted = determineDate();
+
+  $.ajax({
+    url: `/tasks/${id}`,
+
+    method: "PUT",
+    data: {
+      completed: true,
+      timeCreated: timeCompleted,
+    },
+  })
+    .then((response) => {
+      render();
+      getTasks();
+    })
+    .catch((err) => {
+      console.error("PUT failed", err);
+    });
+}
+
 function render() {
   //toggle the create color buttons
   if (showCreateInputs === false) {
@@ -168,33 +195,32 @@ function render() {
   $("#to-do-view").empty();
 
   for (let task of tasks) {
-    let postedBackgroundColor = `rgb(${task.color1}, 
-        ${task.color2}, 
-        ${task.color3})`;
+    let postedBackgroundColor = `rgb(${task.color1},
+          ${task.color2},
+          ${task.color3})`;
 
     if (task.completed === false) {
       $("#to-do-view").append(`
-        <div class="input-fields" data-id="${task.id}" style="background-color:${postedBackgroundColor}">
-          <textarea readonly class="textareas" 
-          style="background-color:${postedBackgroundColor}" maxlength="200">
-          ${task.task}
-          </textarea>
-          <button class="delete-to-do">Delete</button>
-          <button class="complete-to-do">Complete</button>
-          <p class="time-created">Time Created: ${task.timeCreated}</p>
-        </div>
-        `);
+          <div class="input-fields" data-id="${task.id}" style="background-color:${postedBackgroundColor}">
+            <textarea readonly class="textareas"
+            style="background-color:${postedBackgroundColor}" maxlength="200">
+            ${task.task}
+            </textarea>
+            <button class="delete-to-do">Delete</button>
+            <button class="complete-to-do">Complete</button>
+            <p class="time-created">Created: ${task.timeCreated}</p>
+          </div>
+          `);
     } else {
       $("#to-do-view").append(`
-        <div class="input-fields" data-id="${task.id}" style="background-color:${postedBackgroundColor}">
-          <textarea readonly class="textareas" 
-          style="background-color:${postedBackgroundColor}" maxlength="200">
-          ${task.task}
-          </textarea>
-          <button class="delete-to-do">Delete</button>
-          <button class="complete-to-do">Complete</button>
-          <p class="time-completed">Time Created: ${task.timeCreated}</p>
-        </div>
+          <div class="input-fields" data-id="${task.id}" style="background-color:${postedBackgroundColor}">
+            <textarea readonly class="textareas"
+            style="background-color:${postedBackgroundColor}" maxlength="200">
+            ${task.task}
+            </textarea>
+            <button class="delete-to-do">Delete</button>
+            <p class="time-completed">Completed: ${task.timeCreated}</p>
+          </div>
         `);
     }
   }
