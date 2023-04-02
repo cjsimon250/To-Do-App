@@ -1,9 +1,11 @@
 # Project Name
 
-[Project Instructions](./INSTRUCTIONS.md), this line may be removed once you have updated the README.md
+To Do Application
 
 ## Description
 
-Your project description goes here. What problem did you solve? How did you solve it?
+This is a fullstack to-do application that is meant to help users keep track of all of the tasks they need to accomplish. Not only will the user be able to track what all their tasks are, but they also have the ability to see the status of all of the tasks and whether they have been completed or not.
 
-Additional README details can be found [here](https://github.com/PrimeAcademy/readme-template/blob/master/README.md).
+## Technologies Used
+
+HTML5, CSS3, Javascript, jQuery.js, AJAX, PostgreSQL.
